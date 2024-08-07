@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcryptjs')
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -13,7 +12,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     }
-})
+}, { timestamps: true })
 
 const postSchema = new mongoose.Schema({
     userId: {
@@ -64,21 +63,7 @@ const commentReplySchema = new mongoose.Schema({
         required: true
     }
 })
-const SALT_WORK_FACTOR = 5;
-userSchema.pre('save', async function save(next) {
-    if (!this.isModified('password')) return next();
-    try {
-        const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
-        this.password = await bcrypt.hash(this.password, salt);
-        return next();
-    } catch (err) {
-        return next(err);
-    }
-});
 
-userSchema.methods.validatePassword = async function validatePassword(data) {
-    return bcrypt.compare(data, this.password);
-};
 const userModel = mongoose.model('user-details', userSchema)
 const postModel = mongoose.model('post-details', postSchema)
 const commentModel = mongoose.model('comment-details', commentSchema)
