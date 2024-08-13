@@ -2,16 +2,10 @@ const mongoose = require('mongoose')
 const userServices = require('../services/user.services')
 const bcrypt = require('bcryptjs')
 
-const makePasswordHash = async (password) => {
-    const salt = await bcrypt.genSalt(5);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    return hashedPassword;
-}
+
 const createUser = async (req, res, next) => {
     try {
         const userDetail = req.body;
-        const hashPassword = await makePasswordHash(userDetail.password);
-        userDetail.password = hashPassword;
         const data = await userServices.createUserService(userDetail)
         res.status(200).json({ data: data, message: "user added successfully" })
     } catch (error) {
@@ -32,14 +26,14 @@ const updateUser = async (req, res, next) => {
     const userId = req.params.id;
     const userDetail = req.body;
     try {
-        const hashPassword = await makePasswordHash(userDetail.password);
-        userDetail.password = hashPassword;
+        console.log(userDetail, "user details")
         const data = await userServices.updateUserService(userId, userDetail);
+        console.log(data, "update user data in controller")
         if (!data) {
             res.status(409).json({ message: "user not updated.." })
-
+        } else {
+            res.status(200).json({ data: data, message: "user updated successfully" })
         }
-        res.status(200).json({ data: data, message: "user updated successfully" })
     } catch (error) {
         next(error)
     }
@@ -58,8 +52,7 @@ const deleteUser = async (req, res, next) => {
 const registerUser = async (req, res, next) => {
     try {
         const userDetail = req.body
-        const hashPassword = await makePasswordHash(userDetail.password)
-        userDetail.password = hashPassword
+
         console.log(userDetail, "register user detail")
         const data = await userServices.registerUserServices(userDetail)
         res.status(200).json({ data: data, message: "user registered successfully" })

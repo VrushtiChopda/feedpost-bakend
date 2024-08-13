@@ -1,14 +1,22 @@
 require('dotenv').config()
 const mongoose = require('mongoose')
-const userModel = require('../models/user.model')
-const { registerModel, loginModel } = require("../models/user.model")
+const userModel = require('../models/user.model');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+
+const makePasswordHash = async (password) => {
+    const salt = await bcrypt.genSalt(5);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    return hashedPassword;
+}
+
 
 const createUserService = async (userdata) => {
     if (!userdata) {
         console.log("user not created")
     } else {
+        const hashPassword = await makePasswordHash(userdata.password);
+        userdata.password = hashPassword;
         const user = new userModel(userdata)
         const userDetail = await user.save()
         return userDetail
@@ -20,8 +28,13 @@ const getUserService = async () => {
     return userData
 }
 
-const updateUserService = async (userId, userData) => {
-    const collectionData = userModel.findByIdAndUpdate({ _id: userId }, { ...userData }, { new: true });
+const updateUserService = async (userId, userDetail) => {
+    console.log(userDetail, "user detail")
+    const hashPassword = await makePasswordHash(userDetail.password);
+    userDetail.password = hashPassword;
+    console.log(userDetail, "user details after hash")
+    const collectionData = userModel.findByIdAndUpdate({ _id: userId }, { ...userDetail }, { new: true })
+    console.log(collectionData, "collection data")
     if (!collectionData) {
         return null;
     }
@@ -37,16 +50,18 @@ const registerUserServices = async (userdata) => {
     if (!userdata) {
         console.log("user not registered")
     } else {
-        const registerUser = new registerModel(userdata)
+        const hashPassword = await makePasswordHash(userdata.password)
+        userdata.password = hashPassword
+        const registerUser = new userModel(userdata)
         const registerDetails = await registerUser.save()
         return registerDetails
     }
 }
 
 const loginUserService = async (userdata) => {
-    const user = await registerModel.findOne({ email: userdata.email })
+    const user = await userModel.findOne({ email: userdata.email })
     if (!user) {
-        return { message: "user not registered" }
+        return { message: "user not exist" }
     }
 
     const matchPassword = await bcrypt.compare(userdata.password, user.password)
@@ -54,8 +69,8 @@ const loginUserService = async (userdata) => {
         return { message: "enter correct passoword" }
     }
 
-    const token = jwt.sign({ _id: userdata._id, expireTime: '10h' }, process.env.TOKEN_SECRET_KEY,)
-    console.log(token)
-    return { token: token, expireTime: expireTime, message: "Login successfull" }
+    const token = jwt.sign({ _id: userdata._id, email: userdata.email, expireTime: '10h' }, process.env.TOKEN_SECRET_KEY,)
+    console.log(token, "token")
+    return token
 }
 module.exports = { createUserService, getUserService, deleteUserService, updateUserService, registerUserServices, loginUserService }
