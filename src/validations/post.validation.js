@@ -19,7 +19,7 @@ const updatePostValidation = {
 
 const postId = {
     params: Joi.object({
-        id: Joi.objectId().required()
+        id: Joi.string().required()
     })
 }
 

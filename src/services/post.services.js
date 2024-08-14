@@ -17,17 +17,24 @@ const getPostService = async () => {
 }
 
 const updatePostService = async (postId, postdata, userData) => {
-    console.log("userData in update : ", userData)
-    if (!postId) {
+    console.log(postId, "postId")
+    const post = await postModel.findById(postId)
+    console.log(post, "---------------post-----------")
+    if (!post) {
         console.log("this post is not exist")
-    } else if (postdata.userId !== userData.userId) {
+        return
+    }
+    console.log(userData, "---------userdata-------------")
+    console.log(post.userId, "<-- postdata.userId --> ")
+    console.log(userData._id, "<-- userData._id -->")
+    if (post.userId !== userData._id) {
         console.log("unauthorized user can't update post")
+        return
     } else {
         const postDetail = await postModel.findByIdAndUpdate({ _id: postId }, { ...postdata }, { new: true });
-        console.log(postDetail, "update post")
+        console.log(postDetail, "----------update post------------")
         return postDetail
     }
-
 };
 
 const deletePostService = async (postId, userdata, postdata) => {

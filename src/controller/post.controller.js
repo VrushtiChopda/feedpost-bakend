@@ -19,13 +19,19 @@ const getPost = async (req, res, next) => {
 }
 
 const updatePost = async (req, res, next) => {
+    console.log(req.user, "req.user")
     try {
         const id = req.params.id
         const postdata = req.body
         const userData = req.user
+        // console.log(postdata, "---------- post data ---------------")
         console.log(userData, "--------------------------update post--------------------------")
         const data = await updatePostService(id, postdata, userData)
-        res.status(200).json({ data: data, message: 'post updated sucessfully' })
+        if (!data || data === undefined || data === null) {
+            res.status(409).json({ message: "post not updated" })
+        } else {
+            res.status(200).json({ data: data, message: 'post updated sucessfully' })
+        }
     } catch (error) {
         next(error)
     }

@@ -60,6 +60,7 @@ const deleteUserService = async (userId) => {
 
 const loginUserService = async (userdata) => {
     const user = await userModel.findOne({ email: userdata.email })
+    console.log(user, "useruseruseruseruseruseruseruseruseruser")
     if (!user) {
         return { message: "user not exist" }
     }
@@ -68,9 +69,9 @@ const loginUserService = async (userdata) => {
     if (!matchPassword) {
         return { message: "enter correct passoword" }
     }
-
-    const token = jwt.sign({ _id: userdata._id, email: userdata.email, expireTime: '10d' }, process.env.TOKEN_SECRET_KEY,)
+    console.log(user._id, "**********************************user._id")
+    const token = jwt.sign({ _id: user._id, email: userdata.email, expireTime: '10d' }, process.env.TOKEN_SECRET_KEY)
     console.log(token, "token")
     return token
 }
-module.exports = { createUserService, getUserService, deleteUserService, updateUserService, loginUserService }
+module.exports = { createUserService, getUserService, deleteUserService, updateUserService, loginUserService }  
