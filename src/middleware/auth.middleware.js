@@ -16,13 +16,14 @@ const authMiddleware = (req, res, next) => {
     }
 
     const userId = verifyToken._id
-    const userDetail = userModel.findById(userId)
+    const userDetail = userModel.findOne({ _id: userId })
+    console.log(userDetail, "----------- userData after auth ---------------------")
     if (!userDetail) {
         next("unauthorized user")
     }
 
     req.user = userDetail
-
+    console.log(userDetail, "auth middleware")
 }
 
 module.exports = { authMiddleware }

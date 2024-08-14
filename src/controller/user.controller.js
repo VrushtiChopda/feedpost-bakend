@@ -54,7 +54,7 @@ const registerUser = async (req, res, next) => {
         const userDetail = req.body
 
         console.log(userDetail, "register user detail")
-        const data = await userServices.registerUserServices(userDetail)
+        const data = await userServices.createUserService(userDetail)
         res.status(200).json({ data: data, message: "user registered successfully" })
     } catch (error) {
         next(error)

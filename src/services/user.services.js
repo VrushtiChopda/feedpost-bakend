@@ -41,22 +41,22 @@ const updateUserService = async (userId, userDetail) => {
     return collectionData;
 }
 
-const deleteUserService = async () => {
-    const user = userModel.deleteOne()
+const deleteUserService = async (userId) => {
+    const user = userModel.findByIdAndDelete(userId)
     return user
 }
 
-const registerUserServices = async (userdata) => {
-    if (!userdata) {
-        console.log("user not registered")
-    } else {
-        const hashPassword = await makePasswordHash(userdata.password)
-        userdata.password = hashPassword
-        const registerUser = new userModel(userdata)
-        const registerDetails = await registerUser.save()
-        return registerDetails
-    }
-}
+// const registerUserServices = async (userdata) => {
+//     if (!userdata) {
+//         console.log("user not registered")
+//     } else {
+//         const hashPassword = await makePasswordHash(userdata.password)
+//         userdata.password = hashPassword
+//         const registerUser = new userModel(userdata)
+//         const registerDetails = await registerUser.save()
+//         return registerDetails
+//     }
+// }
 
 const loginUserService = async (userdata) => {
     const user = await userModel.findOne({ email: userdata.email })
@@ -69,8 +69,8 @@ const loginUserService = async (userdata) => {
         return { message: "enter correct passoword" }
     }
 
-    const token = jwt.sign({ _id: userdata._id, email: userdata.email, expireTime: '10h' }, process.env.TOKEN_SECRET_KEY,)
+    const token = jwt.sign({ _id: userdata._id, email: userdata.email, expireTime: '10d' }, process.env.TOKEN_SECRET_KEY,)
     console.log(token, "token")
     return token
 }
-module.exports = { createUserService, getUserService, deleteUserService, updateUserService, registerUserServices, loginUserService }
+module.exports = { createUserService, getUserService, deleteUserService, updateUserService, loginUserService }

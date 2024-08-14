@@ -1,0 +1,11 @@
+const express = require('express')
+const { createPost, getPost, updatePost, deletePost } = require('../controller/post.controller')
+const router = express.Router()
+const { validate } = require('express-validation')
+const { addPostValidation, postId, updatePostValidation } = require('../validations/post.validation')
+const { authMiddleware } = require('../middleware/auth.middleware')
+router.post('/addPost', validate(addPostValidation), createPost)
+router.get('/getpost', getPost)
+router.put('/updatePost/:id', authMiddleware, validate(postId), validate(updatePostValidation), updatePost)
+router.delete('/deletePost/:id', authMiddleware, validate(postId), deletePost)
+module.exports = router
