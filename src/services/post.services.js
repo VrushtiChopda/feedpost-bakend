@@ -1,12 +1,12 @@
 const postModel = require('../models/post.model')
-
+const createError = require('http-errors')
 const createPostService = async (postdata) => {
     if (!postdata) {
         console.log("post not created")
+        return "post not created"
     } else {
         const post = new postModel(postdata)
         const postDetail = await post.save()
-        // console.log(postDetail, "postDetail")
         return postDetail
     }
 }
@@ -17,36 +17,29 @@ const getPostService = async () => {
 }
 
 const updatePostService = async (postId, postdata, userData) => {
-    console.log(postId, "postId")
     const post = await postModel.findById(postId)
-    console.log(post, "---------------post-----------")
     if (!post) {
-        console.log("this post is not exist")
-        return
+        throw createError(404, "this post is not exist")
     }
-    console.log(userData, "---------userdata-------------")
-    console.log(post.userId, "<-- postdata.userId --> ")
-    console.log(userData._id, "<-- userData._id -->")
-    if (post.userId !== userData._id) {
-        console.log("unauthorized user can't update post")
-        return
-    } else {
+    if (post.userId.equals(userData._id)) {
         const postDetail = await postModel.findByIdAndUpdate({ _id: postId }, { ...postdata }, { new: true });
-        console.log(postDetail, "----------update post------------")
         return postDetail
+    } else {
+        console.log("unauthorized user can't update post")
+        throw createError(401, "unauthorized user can't update post")
     }
 };
 
-const deletePostService = async (postId, userdata, postdata) => {
-    console.log(userdata, "userData")
+const deletePostService = async (postId, userdata) => {
+    const post = await postModel.findById(postId)
     if (!postId) {
-        console.log("this post is not exist")
-    } else if (postdata.userId !== userdata.userId) {
-        console.log("unauthorized user can't delete post")
-    } else {
+        throw createError(404, "this post is not exist")
+    }
+    if (post.userId.equals(userdata._id)) {
         const post = await postModel.findByIdAndDelete(postId)
-        console.log(post, "post of deleteService")
         return post
+    } else {
+        throw createError(401, "unauthorized user can't update post")
     }
 }
 

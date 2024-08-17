@@ -1,3 +1,4 @@
+const createError = require('http-errors')
 const { createPostService, getPostService, updatePostService, deletePostService } = require('../services/post.services')
 const createPost = async (req, res, next) => {
     try {
@@ -24,11 +25,9 @@ const updatePost = async (req, res, next) => {
         const id = req.params.id
         const postdata = req.body
         const userData = req.user
-        // console.log(postdata, "---------- post data ---------------")
-        console.log(userData, "--------------------------update post--------------------------")
         const data = await updatePostService(id, postdata, userData)
         if (!data || data === undefined || data === null) {
-            res.status(409).json({ message: "post not updated" })
+            return next(createError(409, 'post is not updated'))
         } else {
             res.status(200).json({ data: data, message: 'post updated sucessfully' })
         }
@@ -40,11 +39,13 @@ const updatePost = async (req, res, next) => {
 const deletePost = async (req, res, next) => {
     try {
         const id = req.params.id
-        const postdata = req.body
         const userData = req.user
-        console.log(userData, "delete post")
-        const data = await deletePostService(id, postdata, userData)
-        res.status(200).json({ message: "post deleted successfully" })
+        const data = await deletePostService(id, userData)
+        if (!data || data === undefined || data === null) {
+            return next(createError(409, 'post is not deleted'))
+        } else {
+            res.status(200).json({ message: "post deleted successfully" })
+        }
     } catch (error) {
         next(error)
     }
