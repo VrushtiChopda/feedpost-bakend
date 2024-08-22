@@ -6,7 +6,7 @@ const { addCommentValidaton, updateCommentValidation, commentId } = require('../
 const { authMiddleware } = require('../middleware/auth.middleware')
 
 router.post('/addComment', validate(addCommentValidaton), addComment)
-router.post('/addReply/:id/reply', addCommentReply)
+router.post('/addReply/:id', addCommentReply)
 router.get('/getComment', getComment)
 router.put('/updateComment/:id', authMiddleware, validate(updateCommentValidation), updateComment)
 router.delete('/deleteComment/:id', authMiddleware, validate(commentId), deleteComment)

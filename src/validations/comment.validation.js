@@ -5,7 +5,8 @@ const addCommentValidaton = {
     body: Joi.object({
         userId: Joi.string().required(),
         postId: Joi.string().required(),
-        comment: Joi.string().required()
+        comment: Joi.string().required(),
+        replies: Joi.string().optional()
     })
 }
 
@@ -13,7 +14,8 @@ const updateCommentValidation = {
     body: Joi.object({
         userId: Joi.string().optional(),
         postId: Joi.string().optional(),
-        comment: Joi.string().optional()
+        comment: Joi.string().optional(),
+        replies: Joi.string().optional()
     })
 }
 

@@ -27,6 +27,8 @@ const addCommentReply = async (req, res, next) => {
 const getComment = async (req, res, next) => {
     try {
         const data = await getCommentService()
+        console.log(data);
+        
         return res.status(200).json({ data: data, message: "all comments" })
     } catch (error) {
         next(error)
