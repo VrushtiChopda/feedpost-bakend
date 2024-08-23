@@ -1,6 +1,11 @@
 const mongoose = require('mongoose')
 
-const commentSchema = new mongoose.Schema({
+const replySchema = new mongoose.Schema({
+    parentId: {
+        type: mongoose.Schema.ObjectId,
+        ref: "comment-details",
+        required: true
+    },
     userId: {
         type: mongoose.Schema.ObjectId,
         ref: "user",
@@ -9,14 +14,14 @@ const commentSchema = new mongoose.Schema({
     postId: {
         type: mongoose.Schema.ObjectId,
         ref: "post-details",
-        required: true
+        required: true,
     },
-    comment: {
+    commentReply: {
         type: String,
         required: true
-    },
+    }
 }, { timestamps: true })
 
-const commentModel = mongoose.model('comment-details', commentSchema)
+const replyModel = mongoose.model('comment-replies', replySchema)
 
-module.exports = commentModel       
+module.exports = replyModel 

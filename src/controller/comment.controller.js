@@ -10,25 +10,12 @@ const addComment = async (req, res, next) => {
     }
 }
 
-const addCommentReply = async (req, res, next) => {
-    try {
-        const commentId = req.params.id
-        const commentReply = req.body
-        console.log(commentId, "commentId in controller");
-        console.log(commentReply, "commentReply");
-
-        const data = await commentReplyService(commentId, commentReply)
-        return res.status(200).json({ data: data, message: "comment's reply added" })
-    } catch (error) {
-        next(error)
-    }
-}
 
 const getComment = async (req, res, next) => {
     try {
         const data = await getCommentService()
         console.log(data);
-        
+
         return res.status(200).json({ data: data, message: "all comments" })
     } catch (error) {
         next(error)
@@ -61,4 +48,4 @@ const deleteComment = async (req, res, next) => {
         next(error)
     }
 }
-module.exports = { addComment, addCommentReply, getComment, updateComment, deleteComment }
+module.exports = { addComment, getComment, updateComment, deleteComment }
