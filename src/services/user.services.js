@@ -1,5 +1,6 @@
 require('dotenv').config()
 const mongoose = require('mongoose')
+const {HttpException} = require('../exceptions/HttpException')
 const userModel = require('../models/user.model');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
@@ -13,7 +14,7 @@ const makePasswordHash = async (password) => {
 
 const createUserService = async (userdata) => {
     if (!userdata) {
-        console.log("user not created")
+        next(HttpException(400, 'user not created'));
     } else {
         const hashPassword = await makePasswordHash(userdata.password);
         userdata.password = hashPassword;
@@ -29,12 +30,9 @@ const getUserService = async () => {
 }
 
 const updateUserService = async (userId, userDetail) => {
-    console.log(userDetail, "user detail")
     const hashPassword = await makePasswordHash(userDetail.password);
     userDetail.password = hashPassword;
-    console.log(userDetail, "user details after hash")
     const collectionData = userModel.findByIdAndUpdate({ _id: userId }, { ...userDetail }, { new: true })
-    console.log(collectionData, "collection data")
     if (!collectionData) {
         return null;
     }
@@ -60,16 +58,13 @@ const deleteUserService = async (userId) => {
 
 const loginUserService = async (userdata) => {
     const user = await userModel.findOne({ email: userdata.email })
-    console.log(user, "useruseruseruseruseruseruseruseruseruser")
     if (!user) {
-        return { message: "user not exist" }
+        next(HttpException(404, 'user not exist'));
     }
-
     const matchPassword = await bcrypt.compare(userdata.password, user.password)
     if (!matchPassword) {
-        return { message: "enter correct passoword" }
+        next(HttpException(400, 'enter correct passoword'));
     }
-    console.log(user._id, "**********************************user._id")
     const token = jwt.sign({ _id: user._id, email: userdata.email, expireTime: '10d' }, process.env.TOKEN_SECRET_KEY)
     console.log(token, "token")
     return token

@@ -1,4 +1,4 @@
-const { createReplyService, createNestedReplyService, getReplyService, updateReplyService } = require("../services/reply.services")
+const { createReplyService, createNestedReplyService, getReplyService, updateReplyService, deleteReplyService } = require("../services/reply.services")
 
 const createReplyController = async (req, res, next) => {
     try {
@@ -48,4 +48,15 @@ const updateReplyController = async (req, res, next) => {
         next(error)
     }
 }
-module.exports = { createReplyController, createNestedReplyController, getReplyController, updateReplyController }  
+
+const deleteReplyController = async (req, res, next) => {
+    try {
+        const replyId = req.params.id
+        const userId = req.user._id
+        const data = await deleteReplyService(replyId, userId)
+        return res.status(200).json({ data: data, message: "reply deleted successfully" })
+    } catch (error) {
+        next(error)
+    }
+}
+module.exports = { createReplyController, createNestedReplyController, getReplyController, updateReplyController, deleteReplyController }  
