@@ -14,7 +14,7 @@ const makePasswordHash = async (password) => {
 
 const createUserService = async (userdata) => {
     if (!userdata) {
-        next(HttpException(400, 'user not created'));
+        throw HttpException(400, 'user not created');
     } else {
         const hashPassword = await makePasswordHash(userdata.password);
         userdata.password = hashPassword;
@@ -59,11 +59,11 @@ const deleteUserService = async (userId) => {
 const loginUserService = async (userdata) => {
     const user = await userModel.findOne({ email: userdata.email })
     if (!user) {
-        next(HttpException(404, 'user not exist'));
+        throw HttpException(404, 'user not exist');
     }
     const matchPassword = await bcrypt.compare(userdata.password, user.password)
     if (!matchPassword) {
-        next(HttpException(400, 'enter correct passoword'));
+        throw HttpException(400, 'enter correct passoword');
     }
     const token = jwt.sign({ _id: user._id, email: userdata.email, expireTime: '10d' }, process.env.TOKEN_SECRET_KEY)
     console.log(token, "token")

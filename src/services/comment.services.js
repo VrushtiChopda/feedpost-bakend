@@ -5,13 +5,12 @@ const createError = require('http-errors')
 
 const addCommentService = async (commentData) => {
     if (!commentData) {
-        // return "comment not added"
-        next(HttpException(400, 'comment not added'));
+        throw HttpException(400, 'comment not added');
     } else {
         const comment = new commentModel(commentData)
         const data = await comment.save()
         // console.log(data)
-        return
+        return data
     }
 }
 
@@ -24,15 +23,13 @@ const getCommentService = async () => {
 const updateCommentService = async (commentId, commentData, userData) => {
     const comment = await commentModel.findOne({ _id: commentId })
     if (!comment) {
-        next(HttpException(404, 'this comment is not exist'));
-        // throw createError(404, "this comment is not exist")
+        throw HttpException(404, 'this comment is not exist');
     }
 
     const commentDetail = await commentModel.findOneAndUpdate({ _id: comment._id, userId: userData._id }, { ...commentData }, { new: true })
 
     if (!commentDetail) {
-        next(HttpException(401, "unauthorized user can't update post"));
-        // throw createError(401, "unauthorized user can't update post")
+        throw HttpException(401, "unauthorized user can't update post");
     }
     return commentDetail
 };
@@ -40,8 +37,7 @@ const updateCommentService = async (commentId, commentData, userData) => {
 const deleteCommentService = async (commentId, userData) => {
     const comment = await commentModel.findById(commentId)
     if (!comment) {
-        next(HttpException(404, "this comment is not exist"));
-        // throw createError(404, "this comment is not exist")
+        throw HttpException(404, "this comment is not exist");
     }
     // console.log(comment.userId, "comment.userId");
     // console.log(userData._id, "userData._id");
@@ -50,8 +46,7 @@ const deleteCommentService = async (commentId, userData) => {
         const commentDetail = await commentModel.findByIdAndDelete(commentId)
         return commentDetail
     } else {
-        next(HttpException(401, "unauthorized user can't delete post"));
-        // throw createError(401, "unauthorized user can't delete post")
+        throw HttpException(401, "unauthorized user can't delete post");
     }
 }
 

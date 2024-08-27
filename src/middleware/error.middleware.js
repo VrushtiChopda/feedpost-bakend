@@ -1,6 +1,5 @@
 const { ValidationError } = require('express-validation');
-const { HttpException } = require('../exceptions/HttpsException');
-
+const HttpException = require('../exceptions/HttpException')
 const errorMiddleware = async (error, req, res, next) => {
 
     try {
