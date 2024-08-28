@@ -65,7 +65,7 @@ const loginUser = async (req, res, next) => {
     try {
         const userDetail = req.body
         const data = await userServices.loginUserService(userDetail)
-        res.status(200).json({ data: data })
+        res.status(200).json({ data: data , message : "user registered successfully"})
     } catch (error) {
         next(error)
     }
