@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const userServices = require('../services/user.services')
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
+const { userId } = require('../validations/user.validation');
 
 
 const createUser = async (req, res, next) => {
@@ -15,8 +16,17 @@ const createUser = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
     try {
-        const data = await userServices.getUserService()
-        res.status(200).json({ data: data, message: "all users data" })
+        console.log(req.params.id, "params id")
+        id = req.params.id
+        console.log(id, "getUser")
+        const data = await userServices.getUserService(id)
+        console.log(data, "datadatadata")
+        if (!data) {
+            res.status(409).json({ message: "not found user data" })
+        } else {
+            res.status(200).json({ data: data, message: " user's data" })
+        }
+
     } catch (error) {
         next(error)
     }
@@ -65,7 +75,7 @@ const loginUser = async (req, res, next) => {
     try {
         const userDetail = req.body
         const data = await userServices.loginUserService(userDetail)
-        res.status(200).json({ data: data , message : "user registered successfully"})
+        res.status(200).json({ data: data, message: "user registered successfully" })
     } catch (error) {
         next(error)
     }

@@ -1,6 +1,6 @@
 require('dotenv').config()
 const mongoose = require('mongoose')
-const {HttpException} = require('../exceptions/HttpException')
+const { HttpException } = require('../exceptions/HttpException')
 const userModel = require('../models/user.model');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
@@ -24,8 +24,10 @@ const createUserService = async (userdata) => {
     }
 }
 
-const getUserService = async () => {
-    const userData = await userModel.find()
+const getUserService = async (id) => {
+    console.log(id)
+    const userData = await userModel.findById(id)
+    console.log(userData, "getUSerService")
     return userData
 }
 

@@ -6,7 +6,7 @@ const { addUser, userId, updateUserValidation, } = require('../validations/user.
 const router = express.Router()
 
 router.post('/adduser', validate(addUser), createUser)
-router.get('/getuser', getUser)
+router.get('/getuser/:id', getUser)
 router.delete('/deleteuser/:id', authMiddleware, deleteUser)
 router.put('/updateuser/:id', validate(userId), validate(updateUserValidation), authMiddleware, updateUser)
 
