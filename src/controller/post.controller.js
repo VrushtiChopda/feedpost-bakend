@@ -2,8 +2,10 @@ const createError = require('http-errors')
 const { createPostService, getPostService, updatePostService, deletePostService } = require('../services/post.services')
 const createPost = async (req, res, next) => {
     try {
-        const postdata = req.body
-        const data = await createPostService(postdata)
+        const postdata = req.body;
+        const userData = req.user;
+        console.log(postdata)
+        const data = await createPostService(postdata , userData)
         res.status(200).json({ data: data, message: "post added successfully" })
     } catch (error) {
         next(error)

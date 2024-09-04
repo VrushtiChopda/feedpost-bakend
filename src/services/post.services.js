@@ -1,10 +1,11 @@
 const postModel = require('../models/post.model')
 const { HttpException } = require('../exceptions/HttpException')
 const createError = require('http-errors')
-const createPostService = async (postdata) => {
+const createPostService = async (postdata, userData) => {
     if (!postdata) {
         throw HttpException(404, 'post not created');
     } else {
+        postdata.userId = userData._id;
         const post = new postModel(postdata)
         const postDetail = await post.save()
         return postDetail
