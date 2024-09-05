@@ -3,11 +3,16 @@ const { HttpException } = require('../exceptions/HttpException')
 const commentModel = require("../models/comment.model")
 const createError = require('http-errors')
 
-const addCommentService = async (commentData) => {
+const addCommentService = async (commentData, userId) => {
+    console.log(commentData, "------------------------")
     if (!commentData) {
         throw HttpException(400, 'comment not added');
     } else {
-        const comment = new commentModel(commentData)
+        const comment = new commentModel({
+            userId: userId,
+            postId: commentData.postId,
+            comment: commentData.comment
+        })
         const data = await comment.save()
         // console.log(data)
         return data
@@ -15,8 +20,25 @@ const addCommentService = async (commentData) => {
 }
 
 const getCommentService = async () => {
-    const comment = await commentModel.find().populate('userId').populate('replies.commentReply')
+    const comment = await commentModel.find()
     // console.log(comment, " -------------------------------- ");
+    return comment
+}
+
+const getCommentByPostIdService = async (postId) => {
+    console.log(postId)
+    const comment = await commentModel
+        .find({ postId: postId })
+        .populate({
+            path: 'userId', // Directly populate the userId field in comments
+            select: 'fullName' // Only select the fullName field from the user model
+        })
+        .populate({
+            path: 'postId', // Populate postId if needed
+            select: 'postTitle description' // Adjust fields as needed
+        })
+
+    console.log(comment, "------- comment payload -------------")
     return comment
 }
 
@@ -50,4 +72,4 @@ const deleteCommentService = async (commentId, userData) => {
     }
 }
 
-module.exports = { addCommentService, getCommentService, updateCommentService, deleteCommentService }
+module.exports = { addCommentService, getCommentService, getCommentByPostIdService, updateCommentService, deleteCommentService }    

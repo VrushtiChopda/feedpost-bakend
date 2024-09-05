@@ -67,7 +67,7 @@ const loginUserService = async (userdata) => {
     if (!matchPassword) {
         throw HttpException(400, 'enter correct passoword');
     }
-    const token = jwt.sign({ _id: user._id, email: userdata.email, expireTime: '10d' }, process.env.TOKEN_SECRET_KEY)
+    const token = jwt.sign({ _id: user._id, email: userdata.email }, process.env.TOKEN_SECRET_KEY)
     console.log(token, "token")
     return token
 }

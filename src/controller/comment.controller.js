@@ -1,9 +1,11 @@
-const { addCommentService, getCommentService, updateCommentService, deleteCommentService, commentReplyService } = require("../services/comment.services")
+const { addCommentService, getCommentService, updateCommentService, deleteCommentService, commentReplyService, getCommentByPostIdService } = require("../services/comment.services")
 
 const addComment = async (req, res, next) => {
     try {
         const commentData = req.body
-        const data = await addCommentService(commentData)
+        const userId = req.user._id
+        console.log(commentData, "--------- && ----------", userId)
+        const data = await addCommentService(commentData, userId)
         return res.status(200).json({ data: data, message: "comment added successfully" })
     } catch (error) {
         next(error)
@@ -17,6 +19,17 @@ const getComment = async (req, res, next) => {
         console.log(data);
 
         return res.status(200).json({ data: data, message: "all comments" })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const getCommentByPostId = async (req, res, next) => {
+    try {
+        const postId = req.params.id
+        const data = await getCommentByPostIdService(postId)
+        console.log(data, "data in controller")
+        return res.status(200).json({ data: data, message: "all comment of the post" })
     } catch (error) {
         next(error)
     }
@@ -48,4 +61,4 @@ const deleteComment = async (req, res, next) => {
         next(error)
     }
 }
-module.exports = { addComment, getComment, updateComment, deleteComment }
+module.exports = { addComment, getComment, getCommentByPostId, updateComment, deleteComment }
