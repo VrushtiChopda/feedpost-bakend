@@ -17,6 +17,12 @@ const getPostService = async () => {
     return postDetail
 }
 
+const getPostByUserIdService = async (userId) => {
+    const post = await postModel.find({ userId: userId })
+    console.log(post, "all post")
+    return post
+}
+
 const updatePostService = async (postId, postdata, userData) => {
     const post = await postModel.findById(postId)
     if (!post) {
@@ -43,4 +49,4 @@ const deletePostService = async (postId, userdata) => {
     }
 }
 
-module.exports = { createPostService, getPostService, updatePostService, deletePostService }
+module.exports = { createPostService, getPostService, getPostByUserIdService, updatePostService, deletePostService }
