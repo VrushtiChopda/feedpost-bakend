@@ -1,4 +1,4 @@
-const { addCommentService, getCommentService, updateCommentService, deleteCommentService, commentReplyService, getCommentByPostIdService } = require("../services/comment.services")
+const { addCommentService, getCommentService, updateCommentService, deleteCommentService, commentReplyService, getCommentByPostIdService, deleteCommentByAuthorizeUserService } = require("../services/comment.services")
 
 const addComment = async (req, res, next) => {
     try {
@@ -61,4 +61,17 @@ const deleteComment = async (req, res, next) => {
         next(error)
     }
 }
-module.exports = { addComment, getComment, getCommentByPostId, updateComment, deleteComment }
+
+const deleteCommentByAuthorizeUser = async (req, res, next) => {
+    try {
+        const commentId = req.params.id
+        const commentData = req.body
+        const userData = req.user
+        const data = await deleteCommentByAuthorizeUserService(commentId, userData)
+        console.log(data, "deleteCommentByAuthorizeUser")
+        return res.status(200).json({ data: data, message: "comment deleted successfully by authorized user" })
+    } catch (error) {
+        next(error)
+    }
+}
+module.exports = { addComment, getComment, getCommentByPostId, updateComment, deleteComment, deleteCommentByAuthorizeUser }

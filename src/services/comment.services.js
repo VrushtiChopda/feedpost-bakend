@@ -30,12 +30,12 @@ const getCommentByPostIdService = async (postId) => {
     const comment = await commentModel
         .find({ postId: postId })
         .populate({
-            path: 'userId', // Directly populate the userId field in comments
-            select: 'fullName' // Only select the fullName field from the user model
+            path: 'userId',
+            select: 'fullName'
         })
         .populate({
-            path: 'postId', // Populate postId if needed
-            select: 'postTitle description' // Adjust fields as needed
+            path: 'postId',
+            select: 'postTitle description'
         })
 
     console.log(comment, "------- comment payload -------------")
@@ -72,4 +72,22 @@ const deleteCommentService = async (commentId, userData) => {
     }
 }
 
-module.exports = { addCommentService, getCommentService, getCommentByPostIdService, updateCommentService, deleteCommentService }    
+const deleteCommentByAuthorizeUserService = async (commentId, userData) => {
+    const comment = await commentModel.findById(commentId).populate('postId')
+
+    console.log(comment, "--------- comment ------------")
+    console.log(comment.postId.userId, comment.userId, "--------post check --------")
+    console.log(comment.userId, userData._id, "--------- user check ----------")
+
+    if (!comment) {
+        throw HttpException(404, "this comment is not exist");
+    }
+    if (comment.postId.userId.equals(userData._id) || comment.userId.equals(userData._id)) {
+        const commentDetail = await commentModel.findByIdAndDelete(commentId)
+        return commentDetail
+    } else {
+        throw HttpException(401, "unauthorized user can't delete post");
+    }
+}
+
+module.exports = { addCommentService, getCommentService, getCommentByPostIdService, updateCommentService, deleteCommentService, deleteCommentByAuthorizeUserService }        
