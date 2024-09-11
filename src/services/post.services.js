@@ -18,8 +18,9 @@ const getPostService = async () => {
 }
 
 const getPostByUserIdService = async (userId) => {
+    console.log(userId, "userID")
     const post = await postModel.find({ userId: userId })
-    console.log(post, "all post")
+    console.log(post, "----------all post-----------")
     return post
 }
 

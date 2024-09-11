@@ -8,6 +8,7 @@ const createReplyService = async (commentReply) => {
         throw HttpException(400, "comment reply not added");
     } else {
         const commentReplyData = new replyModel(commentReply)
+        console.log(commentReplyData, "commentReplyData")
         const data = await commentReplyData.save()
         return data
     }
@@ -19,7 +20,7 @@ const createNestedReplyService = async (replyId, replyData) => {
         throw HttpException(400, "reply not added");
     }
     if (!replyId) {
-        throw HttpException(404, "replyId not exist");          
+        throw HttpException(404, "replyId not exist");
     }
 
     const nestedReplyData = new replyModel({
@@ -30,12 +31,13 @@ const createNestedReplyService = async (replyId, replyData) => {
     })
 
     // console.log(nestedReplyData, "nestedReplyData");
-    
+
     const data = await nestedReplyData.save()
     return data
 }
 
 const getReplyService = async () => {
+    // const commentReply = await replyModel.find({ parentId: new mongoose.Types.ObjectId(commentId) })
     const commentReply = await commentModel.aggregate([
         {
             $lookup: {
@@ -67,6 +69,7 @@ const getReplyService = async () => {
         }
     ]);
 
+    console.log(commentReply, "<-------replay log---------->")
     return commentReply;
 }
 

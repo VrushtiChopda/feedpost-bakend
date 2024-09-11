@@ -5,7 +5,8 @@ const { createReply, replyId, updateReply } = require('../validations/reply.vali
 const { authMiddleware } = require('../middleware/auth.middleware')
 const router = express.Router()
 
-router.post('/createReply', validate(createReply), createReplyController)
+// router.post('/createReply', validate(createReply), createReplyController)
+router.post('/createReply', createReplyController)
 router.post('/createNestedReply/:id', createNestedReplyController)
 router.get('/getReply', getReplyController)
 router.put('/updateReply/:id', authMiddleware, validate(replyId), validate(updateReply), updateReplyController)
