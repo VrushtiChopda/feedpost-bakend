@@ -38,36 +38,46 @@ const createNestedReplyService = async (replyId, replyData) => {
 
 const getReplyService = async () => {
     // const commentReply = await replyModel.find({ parentId: new mongoose.Types.ObjectId(commentId) })
-    const commentReply = await commentModel.aggregate([
+    const commentReply = await replyModel.aggregate([
         {
             $lookup: {
-                from: "comment-replies",
-                localField: "_id",
-                foreignField: "parentId",
-                as: "replies"
-            }
-        },
-        {
-            $unwind: {
-                path: "$replies",
-            }
-        },
-        {
-            $lookup: {
-                from: "comment-replies",
-                localField: "replies._id",
-                foreignField: "parentId",
-                as: "replies.nestedReplies"
-            }
-        },
-        {
-            $group: {
-                _id: "$_id",
-                comment: { $first: "$comment" },
-                replies: { $push: "$replies" }
+                from: 'comment-details',
+                localField: '_id',
+                foreignField: '_id',
+                as: "comments"
             }
         }
-    ]);
+    ])
+    // const commentReply = await commentModel.aggregate([
+    //     {
+    //         $lookup: {
+    //             from: "comment-replies",
+    //             localField: "_id",
+    //             foreignField: "parentId",
+    //             as: "replies"
+    //         }
+    //     },
+    // {
+    //     $unwind: {
+    //         path: "$replies",
+    //     }
+    // },
+    // {
+    //     $lookup: {
+    //         from: "comment-replies",
+    //         localField: "replies._id",
+    //         foreignField: "parentId",
+    //         as: "replies.nestedReplies"
+    //     }
+    // },
+    // {
+    //     $group: {
+    //         _id: "$_id",
+    //         comment: { $first: "$comment" },
+    //         replies: { $push: "$replies" }
+    //     }
+    // }
+    // ]);
 
     console.log(commentReply, "<-------replay log---------->")
     return commentReply;

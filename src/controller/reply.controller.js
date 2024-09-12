@@ -2,8 +2,9 @@ const { createReplyService, createNestedReplyService, getReplyService, updateRep
 
 const createReplyController = async (req, res, next) => {
     try {
-        const commentReply = req.body
-        const data = await createReplyService(commentReply)
+        const commentData = req.body
+        console.log(commentData, "==========commentData=======")
+        const data = await createReplyService(commentData)
         if (data) {
             res.status(200).json({ data: data, message: "reply added successfully" })
         } else {
@@ -29,6 +30,7 @@ const createNestedReplyController = async (req, res, next) => {
 const getReplyController = async (req, res, next) => {
     try {
         const data = await getReplyService()
+        // console.log(data, "data in controller")
         if (data) {
             res.status(200).json({ data: data, message: "all replies " })
         }
