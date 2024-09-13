@@ -29,7 +29,9 @@ const createNestedReplyController = async (req, res, next) => {
 
 const getReplyController = async (req, res, next) => {
     try {
-        const data = await getReplyService()
+        const parentId = req.params.id;
+        console.log(parentId, "commentId in controller")
+        const data = await getReplyService(parentId)
         // console.log(data, "data in controller")
         if (data) {
             res.status(200).json({ data: data, message: "all replies " })
@@ -44,6 +46,7 @@ const updateReplyController = async (req, res, next) => {
         const replyId = req.params.id
         const userId = req.user._id
         const replyData = req.body
+        console.log(replyData, "reply data in controller")
         const data = await updateReplyService(replyId, userId, replyData)
         return res.status(200).json({ data: data, message: "reply updated successfully" })
     } catch (error) {

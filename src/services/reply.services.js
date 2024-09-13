@@ -36,18 +36,19 @@ const createNestedReplyService = async (replyId, replyData) => {
     return data
 }
 
-const getReplyService = async () => {
-    // const commentReply = await replyModel.find({ parentId: new mongoose.Types.ObjectId(commentId) })
-    const commentReply = await replyModel.aggregate([
-        {
-            $lookup: {
-                from: 'comment-details',
-                localField: '_id',
-                foreignField: '_id',
-                as: "comments"
-            }
-        }
-    ])
+const getReplyService = async (parentId) => {
+    console.log(parentId, "commentId in service")
+    const commentReply = await replyModel.find({ parentId: new mongoose.Types.ObjectId(parentId) }).populate('userId')
+    // const commentReply = await replyModel.aggregate([
+    //     {
+    //         $lookup: {
+    //             from: 'comment-details',
+    //             localField: '_id',
+    //             foreignField: '_id',
+    //             as: "comments"
+    //         }
+    //     }
+    // ])
     // const commentReply = await commentModel.aggregate([
     //     {
     //         $lookup: {
@@ -79,11 +80,14 @@ const getReplyService = async () => {
     // }
     // ]);
 
-    console.log(commentReply, "<-------replay log---------->")
+    console.log(commentReply, "<-------comment reply---------->")
     return commentReply;
 }
 
 const updateReplyService = async (replyId, userId, replyData) => {
+    console.log(replyId, "replyId in service -----------------")
+    console.log(userId, "userId in service -----------------")
+    console.log(replyData, "replyData in service -----------------")
     const reply = await replyModel.findOne({ _id: replyId })
 
     if (!reply) {
