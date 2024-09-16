@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 
 const postSchema = new mongoose.Schema({
+    postImage: {
+        type: String
+    },
     userId: {
         type: mongoose.Schema.ObjectId,
         ref: "user",

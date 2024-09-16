@@ -3,6 +3,27 @@ const userServices = require('../services/user.services')
 const bcrypt = require('bcryptjs');
 const { userId } = require('../validations/user.validation');
 
+const registerUser = async (req, res, next) => {
+    try {
+        const userDetail = req.body
+
+        console.log(userDetail, "register user detail")
+        const data = await userServices.createUserService(userDetail)
+        res.status(200).json({ data: data, message: "user registered successfully" })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const loginUser = async (req, res, next) => {
+    try {
+        const userDetail = req.body
+        const data = await userServices.loginUserService(userDetail)
+        res.status(200).json({ data: data, message: "user registered successfully" })
+    } catch (error) {
+        next(error)
+    }
+}
 
 const createUser = async (req, res, next) => {
     try {
@@ -16,8 +37,8 @@ const createUser = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
     try {
-        console.log(req.params.id, "params id")
-        id = req.params.id
+        console.log(req.user, "auth user")
+        id = req.user._id
         console.log(id, "getUser")
         const data = await userServices.getUserService(id)
         console.log(data, "datadatadata")
@@ -26,7 +47,6 @@ const getUser = async (req, res, next) => {
         } else {
             res.status(200).json({ data: data, message: " user's data" })
         }
-
     } catch (error) {
         next(error)
     }
@@ -54,28 +74,6 @@ const deleteUser = async (req, res, next) => {
         const userId = req.params.id;
         const data = await userServices.deleteUserService(userId)
         res.status(200).json({ message: "user deleted successfully" })
-    } catch (error) {
-        next(error)
-    }
-}
-
-const registerUser = async (req, res, next) => {
-    try {
-        const userDetail = req.body
-
-        console.log(userDetail, "register user detail")
-        const data = await userServices.createUserService(userDetail)
-        res.status(200).json({ data: data, message: "user registered successfully" })
-    } catch (error) {
-        next(error)
-    }
-}
-
-const loginUser = async (req, res, next) => {
-    try {
-        const userDetail = req.body
-        const data = await userServices.loginUserService(userDetail)
-        res.status(200).json({ data: data, message: "user registered successfully" })
     } catch (error) {
         next(error)
     }

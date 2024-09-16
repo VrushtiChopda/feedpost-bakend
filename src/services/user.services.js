@@ -25,7 +25,7 @@ const createUserService = async (userdata) => {
 }
 
 const getUserService = async (id) => {
-    console.log(id)
+    console.log(id ,"id in get user service")
     const userData = await userModel.findById(id)
     console.log(userData, "getUSerService")
     return userData
