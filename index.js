@@ -16,8 +16,8 @@ app.use('/user', userRoute, errorMiddleware)
 app.use('/post', postRoute, errorMiddleware)
 app.use('/comment', commentRoute, errorMiddleware)
 app.use('/reply', replyRoute, errorMiddleware)
-
-// app.use(cookieParser())
+app.use("/uploads", express.static("uploads"));
+// app.use(cookieParser())  
 // app.get('/', (req, res) => {         
 //     res.send("Testing")
 // })

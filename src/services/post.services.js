@@ -25,6 +25,7 @@ const getPostByUserIdService = async (userId) => {
 }
 
 const updatePostService = async (postId, postdata, userData) => {
+    console.log(postdata, "---------- postdata -----------")
     const post = await postModel.findById(postId)
     if (!post) {
         throw HttpException(404, 'this post is not exist');

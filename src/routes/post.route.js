@@ -9,6 +9,6 @@ const { upload } = require('../middleware/multer.middleware')
 router.post('/addPost', authMiddleware, upload.single('postImage'), validate(addPostValidation), createPost)
 router.get('/getpost', getPost)
 router.get('/getPostById', authMiddleware, getPostByUserId)
-router.put('/updatePost/:id', authMiddleware, validate(postId), validate(updatePostValidation), updatePost)
+router.put('/updatePost/:id', authMiddleware, upload.single('postImage'), validate(postId), validate(updatePostValidation), updatePost)
 router.delete('/deletePost/:id', authMiddleware, validate(postId), deletePost)
-module.exports = router
+module.exports = router 

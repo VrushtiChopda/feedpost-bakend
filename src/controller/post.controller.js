@@ -4,8 +4,8 @@ const createPost = async (req, res, next) => {
     try {
         const postdata = req.body;
         const userData = req.user;
-        postdata.postImage = req.file.path;
-        console.log(postdata)
+        console.log(req.file.path, "---------- file path ----------------")
+        console.log(postdata, "postData with image")
         const data = await createPostService(postdata, userData)
         res.status(200).json({ data: data, message: "post added successfully" })
     } catch (error) {
@@ -40,6 +40,7 @@ const updatePost = async (req, res, next) => {
         const id = req.params.id
         const postdata = req.body
         const userData = req.user
+        postdata.postImage = req.file.path
         const data = await updatePostService(id, postdata, userData)
         if (!data || data === undefined || data === null) {
             return next(createError(409, 'post is not updated'))
