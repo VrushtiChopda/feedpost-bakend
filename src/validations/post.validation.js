@@ -3,6 +3,7 @@ Joi.objectId = require('joi-objectid')(Joi)
 
 const addPostValidation = {
     body: Joi.object({
+        postImage: Joi.string().optional(),
         postTitle: Joi.string().required(),
         description: Joi.string().required()
     })
@@ -10,6 +11,7 @@ const addPostValidation = {
 
 const updatePostValidation = {
     body: Joi.object({
+        postImage: Joi.string().optional(),
         postTitle: Joi.string().optional(),
         description: Joi.string().optional()
     })

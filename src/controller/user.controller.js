@@ -1,7 +1,5 @@
 const mongoose = require('mongoose')
 const userServices = require('../services/user.services')
-const bcrypt = require('bcryptjs');
-const { userId } = require('../validations/user.validation');
 
 const registerUser = async (req, res, next) => {
     try {
