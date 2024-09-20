@@ -4,7 +4,8 @@ const commentModel = require("../models/comment.model")
 const createError = require('http-errors')
 
 const addCommentService = async (commentData, userId) => {
-    console.log(commentData, "------------------------")
+    console.log(commentData, "---------commentData----------")
+    console.log(userId, "-------- userId -----------------")
     if (!commentData) {
         throw HttpException(400, 'comment not added');
     } else {

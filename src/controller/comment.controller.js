@@ -3,8 +3,7 @@ const { addCommentService, getCommentService, updateCommentService, deleteCommen
 const addComment = async (req, res, next) => {
     try {
         const commentData = req.body
-        const userId = req.user._id
-        console.log(commentData, "--------- && ----------", userId)
+        const userId = req.user._id 
         const data = await addCommentService(commentData, userId)
         return res.status(200).json({ data: data, message: "comment added successfully" })
     } catch (error) {
@@ -65,7 +64,6 @@ const deleteComment = async (req, res, next) => {
 const deleteCommentByAuthorizeUser = async (req, res, next) => {
     try {
         const commentId = req.params.id
-        const commentData = req.body
         const userData = req.user
         const data = await deleteCommentByAuthorizeUserService(commentId, userData)
         console.log(data, "deleteCommentByAuthorizeUser")

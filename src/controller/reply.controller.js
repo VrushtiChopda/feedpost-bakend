@@ -30,7 +30,7 @@ const createNestedReplyController = async (req, res, next) => {
 const getReplyController = async (req, res, next) => {
     try {
         const parentId = req.params.id;
-        console.log(parentId, "commentId in controller")
+        // console.log(parentId, "commentId in controller")
         const data = await getReplyService(parentId)
         // console.log(data, "data in controller")
         if (data) {

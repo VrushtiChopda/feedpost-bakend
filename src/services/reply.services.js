@@ -37,7 +37,7 @@ const createNestedReplyService = async (replyId, replyData) => {
 }
 
 const getReplyService = async (parentId) => {
-    console.log(parentId, "commentId in service")
+    // console.log(parentId, "commentId in service")
     const commentReply = await replyModel.find({ parentId: new mongoose.Types.ObjectId(parentId) }).populate('userId')
     // const commentReply = await replyModel.aggregate([
     //     {
@@ -80,7 +80,7 @@ const getReplyService = async (parentId) => {
     // }
     // ]);
 
-    console.log(commentReply, "<-------comment reply---------->")
+    // console.log(commentReply, "<-------comment reply---------->")
     return commentReply;
 }
 
