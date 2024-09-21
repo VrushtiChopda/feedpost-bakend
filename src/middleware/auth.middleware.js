@@ -11,9 +11,9 @@ const authMiddleware = async (req, res, next) => {
         }
 
         const verifyToken = jwt.verify(authResponse, process.env.TOKEN_SECRET_KEY)
-        console.log(verifyToken, "verfiy Token")
+        // console.log(verifyToken, "verfiy Token")
         if (!verifyToken) {
-            console.log('Invalid Token')
+            // console.log('Invalid Token')
             next(HttpException(401, 'Wrong authentication token'));
         }
 

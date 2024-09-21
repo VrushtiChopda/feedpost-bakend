@@ -8,7 +8,7 @@ const createReplyService = async (commentReply) => {
         throw HttpException(400, "comment reply not added");
     } else {
         const commentReplyData = new replyModel(commentReply)
-        console.log(commentReplyData, "commentReplyData")
+        // console.log(commentReplyData, "commentReplyData")
         const data = await commentReplyData.save()
         return data
     }
@@ -85,9 +85,9 @@ const getReplyService = async (parentId) => {
 }
 
 const updateReplyService = async (replyId, userId, replyData) => {
-    console.log(replyId, "replyId in service -----------------")
-    console.log(userId, "userId in service -----------------")
-    console.log(replyData, "replyData in service -----------------")
+    // console.log(replyId, "replyId in service -----------------")
+    // console.log(userId, "userId in service -----------------")
+    // console.log(replyData, "replyData in service -----------------")
     const reply = await replyModel.findOne({ _id: replyId })
 
     if (!reply) {
@@ -116,4 +116,24 @@ const deleteReplyService = async (replyId, userId) => {
     }
 }
 
-module.exports = { createReplyService, createNestedReplyService, getReplyService, updateReplyService, deleteReplyService }  
+const deleteReplyByAuthUserService = async (replyId, userId) => {
+    const reply = await replyModel.findById(replyId).populate({
+        path: 'postId',
+        model: 'post-details',  // Explicitly specify the model
+        select: 'userId'  // Just populate userId
+    });
+    console.log(reply, "-----------  reply --------------")
+    // if (!reply) {
+    //     throw HttpException(404, "this reply is not exist");
+    // }
+    // console.log(reply.userId, "======= auth user =======", userId)
+    // console.log(reply?.postId?.userId, "====== post user ========", userId)
+    // if (reply.userId.equals(userId) || reply.postId.userId.equals(userId)) {
+    //     const data = await replyModel.findByIdAndDelete(replyId)
+    //     return data
+    // } else {
+    //     throw HttpException(401, "unauthorized user can't update reply");
+    // }
+}
+
+module.exports = { createReplyService, createNestedReplyService, getReplyService, updateReplyService, deleteReplyService, deleteReplyByAuthUserService }  

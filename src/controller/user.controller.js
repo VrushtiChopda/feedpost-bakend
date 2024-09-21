@@ -4,8 +4,7 @@ const userServices = require('../services/user.services')
 const registerUser = async (req, res, next) => {
     try {
         const userDetail = req.body
-
-        console.log(userDetail, "register user detail")
+        // console.log(userDetail, "register user detail")
         const data = await userServices.createUserService(userDetail)
         res.status(200).json({ data: data, message: "user registered successfully" })
     } catch (error) {
@@ -39,7 +38,7 @@ const getUser = async (req, res, next) => {
         id = req.user._id
         console.log(id, "getUser")
         const data = await userServices.getUserService(id)
-        console.log(data, "datadatadata")
+        // console.log(data, "datadatadata")
         if (!data) {
             res.status(409).json({ message: "not found user data" })
         } else {
@@ -54,9 +53,9 @@ const updateUser = async (req, res, next) => {
     const userId = req.params.id;
     const userDetail = req.body;
     try {
-        console.log(userDetail, "user details")
+        // console.log(userDetail, "user details")
         const data = await userServices.updateUserService(userId, userDetail);
-        console.log(data, "update user data in controller")
+        // console.log(data, "update user data in controller")
         if (!data) {
             res.status(409).json({ message: "user not updated.." })
         } else {

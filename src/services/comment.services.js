@@ -4,8 +4,8 @@ const commentModel = require("../models/comment.model")
 const createError = require('http-errors')
 
 const addCommentService = async (commentData, userId) => {
-    console.log(commentData, "---------commentData----------")
-    console.log(userId, "-------- userId -----------------")
+    // console.log(commentData, "---------commentData----------")
+    // console.log(userId, "-------- userId -----------------")
     if (!commentData) {
         throw HttpException(400, 'comment not added');
     } else {
@@ -27,7 +27,7 @@ const getCommentService = async () => {
 }
 
 const getCommentByPostIdService = async (postId) => {
-    console.log(postId)
+    // console.log(postId)
     const comment = await commentModel
         .find({ postId: postId })
         .populate({
@@ -39,7 +39,7 @@ const getCommentByPostIdService = async (postId) => {
             select: 'postTitle description'
         })
 
-    console.log(comment, "------- comment payload -------------")
+    // console.log(comment, "------- comment payload -------------")
     return comment
 }
 
@@ -75,11 +75,9 @@ const deleteCommentService = async (commentId, userData) => {
 
 const deleteCommentByAuthorizeUserService = async (commentId, userData) => {
     const comment = await commentModel.findById(commentId).populate('postId')
-
-    console.log(comment, "--------- comment ------------")
-    console.log(comment.postId.userId, comment.userId, "--------post check --------")
-    console.log(comment.userId, userData._id, "--------- user check ----------")
-
+    // console.log(comment, "--------- comment ------------")
+    // console.log(comment.postId.userId, comment.userId, "--------post check --------")
+    // console.log(comment.userId, userData._id, "--------- user check ----------")
     if (!comment) {
         throw HttpException(404, "this comment is not exist");
     }

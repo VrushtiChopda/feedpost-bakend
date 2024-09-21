@@ -1,9 +1,9 @@
-const { createReplyService, createNestedReplyService, getReplyService, updateReplyService, deleteReplyService } = require("../services/reply.services")
+const { createReplyService, createNestedReplyService, getReplyService, updateReplyService, deleteReplyService, deleteReplyByAuthUserService } = require("../services/reply.services")
 
 const createReplyController = async (req, res, next) => {
     try {
         const commentData = req.body
-        console.log(commentData, "==========commentData=======")
+        // console.log(commentData, "==========commentData=======")
         const data = await createReplyService(commentData)
         if (data) {
             res.status(200).json({ data: data, message: "reply added successfully" })
@@ -18,8 +18,8 @@ const createNestedReplyController = async (req, res, next) => {
     try {
         const replyId = req.params.id
         const replyData = req.body
-        console.log(replyId, "replyid");
-        console.log(replyData, "replyData");
+        // console.log(replyId, "replyid");
+        // console.log(replyData, "replyData");
         const data = await createNestedReplyService(replyId, replyData)
         return res.status(200).json({ data: data, message: "nested reply created successfully" })
     } catch (error) {
@@ -46,7 +46,7 @@ const updateReplyController = async (req, res, next) => {
         const replyId = req.params.id
         const userId = req.user._id
         const replyData = req.body
-        console.log(replyData, "reply data in controller")
+        // console.log(replyData, "reply data in controller")
         const data = await updateReplyService(replyId, userId, replyData)
         return res.status(200).json({ data: data, message: "reply updated successfully" })
     } catch (error) {
@@ -64,4 +64,15 @@ const deleteReplyController = async (req, res, next) => {
         next(error)
     }
 }
-module.exports = { createReplyController, createNestedReplyController, getReplyController, updateReplyController, deleteReplyController }  
+
+const deleteReplyByAuthUser = async (req, res, next) => {
+    try {
+        const replyId = req.params.id
+        const userId = req.user._id
+        const data = await deleteReplyByAuthUserService(replyId, userId)
+        return res.status(200).json({ data: data, message: "reply deleted successfully by authorized user" })
+    } catch (error) {
+        next(error)
+    }
+}
+module.exports = { createReplyController, createNestedReplyController, getReplyController, updateReplyController, deleteReplyController, deleteReplyByAuthUser }  

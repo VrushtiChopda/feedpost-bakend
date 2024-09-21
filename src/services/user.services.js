@@ -11,7 +11,6 @@ const makePasswordHash = async (password) => {
     return hashedPassword;
 }
 
-
 const createUserService = async (userdata) => {
     if (!userdata) {
         throw HttpException(400, 'user not created');
@@ -25,9 +24,9 @@ const createUserService = async (userdata) => {
 }
 
 const getUserService = async (id) => {
-    console.log(id ,"id in get user service")
+    // console.log(id ,"id in get user service")
     const userData = await userModel.findById(id)
-    console.log(userData, "getUSerService")
+    // console.log(userData, "getUSerService")
     return userData
 }
 
@@ -68,7 +67,7 @@ const loginUserService = async (userdata) => {
         throw HttpException(400, 'enter correct passoword');
     }
     const token = jwt.sign({ _id: user._id, email: userdata.email }, process.env.TOKEN_SECRET_KEY)
-    console.log(token, "token")
+    // console.log(token, "token")
     return token
 }
 module.exports = { createUserService, getUserService, deleteUserService, updateUserService, loginUserService }  
