@@ -39,6 +39,7 @@ const createNestedReplyService = async (replyId, replyData) => {
 const getReplyService = async (parentId) => {
     // console.log(parentId, "commentId in service")
     const commentReply = await replyModel.find({ parentId: new mongoose.Types.ObjectId(parentId) }).populate('userId')
+    console.log(commentReply, "-------- comment reply in service -------- ")
     // const commentReply = await replyModel.aggregate([
     //     {
     //         $lookup: {
@@ -79,8 +80,6 @@ const getReplyService = async (parentId) => {
     //     }
     // }
     // ]);
-
-    // console.log(commentReply, "<-------comment reply---------->")
     return commentReply;
 }
 
@@ -117,23 +116,26 @@ const deleteReplyService = async (replyId, userId) => {
 }
 
 const deleteReplyByAuthUserService = async (replyId, userId) => {
+    console.log(replyId, "-------- reply ID in service -------")
+    console.log(userId, "============= userid in service -----------")
     const reply = await replyModel.findById(replyId).populate({
         path: 'postId',
-        model: 'post-details',  // Explicitly specify the model
-        select: 'userId'  // Just populate userId
+        model: 'post-details',
     });
     console.log(reply, "-----------  reply --------------")
-    // if (!reply) {
-    //     throw HttpException(404, "this reply is not exist");
-    // }
-    // console.log(reply.userId, "======= auth user =======", userId)
-    // console.log(reply?.postId?.userId, "====== post user ========", userId)
-    // if (reply.userId.equals(userId) || reply.postId.userId.equals(userId)) {
-    //     const data = await replyModel.findByIdAndDelete(replyId)
-    //     return data
-    // } else {
-    //     throw HttpException(401, "unauthorized user can't update reply");
-    // }
+    console.log(reply?.userId, "======= auth user =======", userId)
+    console.log(reply?.postId?.userId, "====== post user ========", userId)
+
+    if (!reply) {
+        throw HttpException(404, "this reply is not exist");
+    }
+    if (reply?.postId?.userId?.equals(userId) || reply?.userId?.equals(userId)) {
+        const data = await replyModel.findByIdAndDelete(replyId)
+        console.log(data, "========= data --------------")
+        return data
+    } else {
+        throw HttpException(401, "unauthorized user can't delete reply--------------------");
+    }
 }
 
 module.exports = { createReplyService, createNestedReplyService, getReplyService, updateReplyService, deleteReplyService, deleteReplyByAuthUserService }  

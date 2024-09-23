@@ -78,6 +78,8 @@ const deleteCommentByAuthorizeUserService = async (commentId, userData) => {
     // console.log(comment, "--------- comment ------------")
     // console.log(comment.postId.userId, comment.userId, "--------post check --------")
     // console.log(comment.userId, userData._id, "--------- user check ----------")
+    console.log(comment.postId.userId, "============ post user =============", userData._id)
+    console.log(comment.userId, "=========== login user ===================", userData._id)
     if (!comment) {
         throw HttpException(404, "this comment is not exist");
     }

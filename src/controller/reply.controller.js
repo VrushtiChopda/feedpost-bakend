@@ -65,14 +65,16 @@ const deleteReplyController = async (req, res, next) => {
     }
 }
 
-const deleteReplyByAuthUser = async (req, res, next) => {
+const deleteReplyByAuthUserController = async (req, res, next) => {
     try {
         const replyId = req.params.id
         const userId = req.user._id
+        console.log(replyId, "------------- replyId ----------------------")
+        console.log(userId, "-------------- userId -------------------")
         const data = await deleteReplyByAuthUserService(replyId, userId)
         return res.status(200).json({ data: data, message: "reply deleted successfully by authorized user" })
     } catch (error) {
         next(error)
     }
 }
-module.exports = { createReplyController, createNestedReplyController, getReplyController, updateReplyController, deleteReplyController, deleteReplyByAuthUser }  
+module.exports = { createReplyController, createNestedReplyController, getReplyController, updateReplyController, deleteReplyController, deleteReplyByAuthUserController }  
