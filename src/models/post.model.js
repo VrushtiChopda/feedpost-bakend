@@ -17,6 +17,10 @@ const postSchema = new mongoose.Schema({
     description: {
         type: String,
         required: true
+    },
+    isAchieved: {
+        type: Boolean,
+        default: false
     }
 })
 

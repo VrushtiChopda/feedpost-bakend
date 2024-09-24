@@ -26,7 +26,6 @@ const getPostByUserIdService = async (userId) => {
     return post
 }
 
-
 const updatePostService = async (postId, postdata, userData) => {
     // console.log(postdata, "---------- postdata -----------");
     const post = await postModel.findById(postId);

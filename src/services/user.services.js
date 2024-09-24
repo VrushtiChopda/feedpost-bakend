@@ -4,7 +4,8 @@ const { HttpException } = require('../exceptions/HttpException')
 const userModel = require('../models/user.model');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-
+const fs = require('fs')
+const path = require('path')
 const makePasswordHash = async (password) => {
     const salt = await bcrypt.genSalt(5);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -31,8 +32,22 @@ const getUserService = async (id) => {
 }
 
 const updateUserService = async (userId, userDetail) => {
-    const hashPassword = await makePasswordHash(userDetail.password);
-    userDetail.password = hashPassword;
+    const user = await userModel.findOne({ _id: userId })
+    // console.log(user, "----------- user --------------")
+    // console.log(userId, "---------------- userId in service-----------")
+    // console.log(userDetail, "------------ userDetails in services -------------")
+
+    if (userDetail.profile && user.profile) {
+        const currentImagePath = path.join(__dirname, '../..', user.profile)
+        fs.unlink(currentImagePath, (err) => {
+            if (err) {
+                console.log('Failed to delete existing image:', err)
+            }
+        })
+    } else {
+        console.log('File does not exist, cannot delete:', currentImagePath)
+    }
+
     const collectionData = userModel.findByIdAndUpdate({ _id: userId }, { ...userDetail }, { new: true })
     if (!collectionData) {
         return null;

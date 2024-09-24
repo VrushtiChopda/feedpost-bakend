@@ -4,11 +4,11 @@ const { authMiddleware } = require('../middleware/auth.middleware')
 const { validate } = require('express-validation')
 const { addUser, userId, updateUserValidation, } = require('../validations/user.validation')
 const router = express.Router()
-
+const { upload } = require('../middleware/multer.middleware')
 router.post('/adduser', validate(addUser), createUser)
 router.get('/getuser', authMiddleware, getUser)
 router.delete('/deleteuser/:id', authMiddleware, deleteUser)
-router.put('/updateuser/:id', validate(userId), validate(updateUserValidation), authMiddleware, updateUser)
+router.put('/updateuser/:id', validate(userId), upload.single('profile'), validate(updateUserValidation), authMiddleware, updateUser)
 
 router.post('/register', registerUser)
 router.post('/login', loginUser)

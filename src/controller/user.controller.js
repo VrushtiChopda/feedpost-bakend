@@ -52,6 +52,9 @@ const getUser = async (req, res, next) => {
 const updateUser = async (req, res, next) => {
     const userId = req.params.id;
     const userDetail = req.body;
+    userDetail.profile = req?.file?.path
+
+    console.log(userDetail, " ----------- userDetail in controller")
     try {
         // console.log(userDetail, "user details")
         const data = await userServices.updateUserService(userId, userDetail);

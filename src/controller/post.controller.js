@@ -69,4 +69,13 @@ const deletePost = async (req, res, next) => {
         next(error)
     }
 }
-module.exports = { createPost, getPost, getPostByUserId, updatePost, deletePost }
+
+const toggleArchivePost = async (req, res, next) => {
+    try {
+        const postId = req.params.id
+        const archive = req.body
+    } catch (error) {
+        next(error)
+    }
+}
+module.exports = { createPost, getPost, getPostByUserId, updatePost, deletePost, toggleArchivePost }
