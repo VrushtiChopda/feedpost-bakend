@@ -18,7 +18,7 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    isAchieved: {
+    isArchived: {
         type: Boolean,
         default: false
     }

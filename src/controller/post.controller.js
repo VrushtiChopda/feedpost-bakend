@@ -1,5 +1,5 @@
 const createError = require('http-errors')
-const { createPostService, getPostService, updatePostService, deletePostService, getPostByUserIdService } = require('../services/post.services')
+const { createPostService, getPostService, updatePostService, deletePostService, getPostByUserIdService, archivePostService, getArchivedPostService } = require('../services/post.services')
 const createPost = async (req, res, next) => {
     try {
         const postdata = req.body;
@@ -27,7 +27,9 @@ const getPostByUserId = async (req, res, next) => {
     try {
         const userId = req.user._id
         // console.log(userId, "--- user Id ----")
-        const data = await getPostByUserIdService(userId)
+        const data = await getPostByUserIdService(
+            userId
+        )
         // console.log(data, "data")
         res.status(200).json({ data: data, message: "all post of particular user" })
     } catch (error) {
@@ -73,9 +75,27 @@ const deletePost = async (req, res, next) => {
 const toggleArchivePost = async (req, res, next) => {
     try {
         const postId = req.params.id
-        const archive = req.body
+        const userId = req.user._id
+        const { isArchive } = req.body
+        console.log(isArchive, "archive")
+        console.log(userId, "---------- user id ------------")
+        console.log(postId, "------------- postId in archive")
+        const data = await archivePostService(postId, userId, isArchive)
+        console.log(data, "---------- data ---------------")
+        res.status(200).json({ message: "post is archived" })
     } catch (error) {
         next(error)
     }
 }
-module.exports = { createPost, getPost, getPostByUserId, updatePost, deletePost, toggleArchivePost }
+
+const getArchivedPost = async (req, res, next) => {
+    try {
+        const data = await getArchivedPostService()
+        // console.log(data, "-------- data in getArchive post")
+        res.status(200).json({ data: data, message: "archived post data" })
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = { createPost, getPost, getPostByUserId, updatePost, deletePost, toggleArchivePost, getArchivedPost }

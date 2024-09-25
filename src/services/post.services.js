@@ -15,13 +15,18 @@ const createPostService = async (postdata, userData) => {
 }
 
 const getPostService = async () => {
-    const postDetail = await postModel.find()
+    const postDetail = await postModel.find({
+        isArchived: false
+    })
     return postDetail
 }
 
 const getPostByUserIdService = async (userId) => {
     // console.log(userId, "userID")
-    const post = await postModel.find({ userId: userId })
+    const post = await postModel.find({
+        userId: userId,
+        isArchived: false
+    })
     // console.log(post, "----------all post-----------")
     return post
 }
@@ -87,4 +92,27 @@ const deletePostService = async (postId, userdata) => {
     }
 }
 
-module.exports = { createPostService, getPostService, getPostByUserIdService, updatePostService, deletePostService }
+const archivePostService = async (postId, userId, archive) => {
+    const post = await postModel.findById(postId)
+    console.log(post, "--------- post in archive -------------")
+    if (post.isArchived === true) {
+        return 'post is already archived'
+    }
+    console.log(archive, "---------- archive in service -0----------")
+    console.log(post.userId, "------------- post's user Id ---------")
+    console.log(userId, "-------------- auth user --------------------")
+    if (post.userId.equals(userId)) {
+        const updatePost = await postModel.findOneAndUpdate({ _id: postId }, { isArchived: archive })
+        console.log(updatePost, "updatePost")
+        return updatePost
+    } else {
+        throw HttpException(401, "unauthorized user can't update post")
+    }
+}
+
+const getArchivedPostService = async () => {
+    const postData = await postModel.find({ isArchived: true })
+    console.log(postData, "-------- postData in service --------")
+    return postData
+}
+module.exports = { createPostService, getPostService, getPostByUserIdService, updatePostService, deletePostService, archivePostService, getArchivedPostService }

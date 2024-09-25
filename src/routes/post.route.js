@@ -1,5 +1,5 @@
 const express = require('express')
-const { createPost, getPost, updatePost, deletePost, getPostByUserId, toggleArchivePost } = require('../controller/post.controller')
+const { createPost, getPost, updatePost, deletePost, getPostByUserId, toggleArchivePost, getArchivedPost } = require('../controller/post.controller')
 const router = express.Router()
 const { validate } = require('express-validation')
 const { addPostValidation, postId, updatePostValidation } = require('../validations/post.validation')
@@ -10,6 +10,7 @@ router.post('/addPost', authMiddleware, upload.single('postImage'), validate(add
 router.get('/getpost', getPost)
 router.get('/getPostById', authMiddleware, getPostByUserId)
 router.put('/updatePost/:id', authMiddleware, upload.single('postImage'), validate(postId), validate(updatePostValidation), updatePost)
-router.patch('/archivePost/:id', authMiddleware, validate(postId),toggleArchivePost)
+router.patch('/archivePost/:id', authMiddleware, validate(postId), toggleArchivePost)
+router.get('/getArchivePost', getArchivedPost)
 router.delete('/deletePost/:id', authMiddleware, validate(postId), deletePost)
 module.exports = router 
