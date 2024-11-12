@@ -8,4 +8,4 @@ const databaseConnection = mongoose.connect(process.env.MONGODB_URL)
         console.log(e)
     })
 
-module.exports = databaseConnection
+module.exports = databaseConnection 

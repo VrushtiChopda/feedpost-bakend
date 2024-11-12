@@ -12,4 +12,5 @@ router.get('/getReply/:id', getReplyController)
 router.put('/updateReply/:id', authMiddleware, validate(replyId), validate(updateReply), updateReplyController)
 router.delete('/deleteReply/:id', authMiddleware, validate(replyId), deleteReplyController)
 router.delete('/deleteReplyByAuthUser/:id', authMiddleware, validate(replyId), deleteReplyByAuthUserController)
+
 module.exports = router 

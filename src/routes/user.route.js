@@ -8,7 +8,7 @@ const { upload } = require('../middleware/multer.middleware')
 router.post('/adduser', validate(addUser), createUser)
 router.get('/getuser', authMiddleware, getUser)
 router.delete('/deleteuser/:id', authMiddleware, deleteUser)
-router.put('/updateuser/:id', validate(userId), upload.single('profile'), validate(updateUserValidation), authMiddleware, updateUser)
+router.put('/updateuser/:id', validate(userId), upload.array('profile'), validate(updateUserValidation), authMiddleware, updateUser)
 
 router.post('/register', registerUser)
 router.post('/login', loginUser)

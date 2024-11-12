@@ -25,7 +25,7 @@ const createUserService = async (userdata) => {
 }
 
 const getUserService = async (id) => {
-    // console.log(id ,"id in get user service")
+    // console.log(id ,"id in get user service") 
     const userData = await userModel.findById(id)
     // console.log(userData, "getUSerService")
     return userData
@@ -85,4 +85,5 @@ const loginUserService = async (userdata) => {
     // console.log(token, "token")
     return token
 }
-module.exports = { createUserService, getUserService, deleteUserService, updateUserService, loginUserService }  
+
+module.exports = { createUserService, getUserService, deleteUserService, updateUserService, loginUserService }      
